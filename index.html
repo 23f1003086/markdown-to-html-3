@@ -1,0 +1,68 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Markdown Converter</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/styles/default.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        #markdown-output {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-top: 20px;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        #loading {
+            display: none;
+            font-weight: bold;
+            color: blue;
+        }
+    </style>
+</head>
+<body>
+    <h1>Markdown to HTML Converter</h1>
+    <textarea id="markdown-input" rows="10" cols="50" placeholder="Paste your markdown here..."></textarea><br>
+    <button id="convert-btn">Convert</button>
+    <div id="loading">Processing...</div>
+    <div id="markdown-output"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/highlight.min.js"></script>
+    <script>
+        document.getElementById('convert-btn').addEventListener('click', function() {
+            const input = document.getElementById('markdown-input').value;
+            const outputDiv = document.getElementById('markdown-output');
+            const loadingDiv = document.getElementById('loading');
+
+            loadingDiv.style.display = 'block';
+            outputDiv.innerHTML = '';
+
+            try {
+                const html = marked(input);
+                outputDiv.innerHTML = html;
+                loadingDiv.style.display = 'none';
+                // Highlight code blocks
+                hljs.highlightAll();
+            } catch (error) {
+                loadingDiv.style.display = 'none';
+                outputDiv.innerHTML = '<p>Error processing markdown: ' + error.message + '</p>';
+            }
+        });
+
+        // Load default markdown content from input.md
+        const defaultMarkdown = `# Sample Markdown\n\nThis is a sample markdown file.\n\n## Code Example\n\n\`\`\`javascript\nconsole.log("Hello, World!");\n\`\`\``;
+        document.getElementById('markdown-input').value = defaultMarkdown;
+        document.getElementById('convert-btn').click();
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@2.1.5/dist/tesseract.min.js"></script>
+</body>
+</html>
